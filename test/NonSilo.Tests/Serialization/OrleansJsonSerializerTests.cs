@@ -48,16 +48,21 @@ namespace UnitTests.Serialization
 
         private static void TestSerializationRoundTrip(SerializationManager serializationManager)
         {
-            var data = new JsonPoco {Prop = "some data"};
+            var data = new JsonPoco { Prop = "some data" };
             var serialized = serializationManager.SerializeToByteArray(data);
             var subSequence = Encoding.UTF8.GetBytes("crazy_name");
 
-            // The serialized data should have our custom [JsonProperty] name, 'crazy_name', in it.
+            //The serialized data should have our custom [JsonProperty] name, 'crazy_name', in it.
             Assert.Contains(ToString(subSequence), ToString(serialized));
 
             var deserialized = serializationManager.DeserializeFromByteArray<JsonPoco>(serialized);
 
             Assert.Equal(data.Prop, deserialized.Prop);
+
+            var enumSerialized = serializationManager.SerializeToByteArray(SampleEnum.One);
+            var enumDeserialized = serializationManager.DeserializeFromByteArray<SampleEnum>(enumSerialized);
+
+            Assert.Equal(SampleEnum.One, enumDeserialized);
         }
 
         private static string ToString(byte[] bytes)
@@ -67,8 +72,12 @@ namespace UnitTests.Serialization
             {
                 result.Append($"{b:x2}");
             }
-
             return result.ToString();
+        }
+
+        public enum SampleEnum
+        {
+            One, Two
         }
 
         public class JsonPoco

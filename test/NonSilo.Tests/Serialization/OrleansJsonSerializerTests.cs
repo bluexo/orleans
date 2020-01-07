@@ -14,6 +14,7 @@ namespace UnitTests.Serialization
     using Newtonsoft.Json;
 
     using Orleans.Serialization;
+    using UnitTests.GrainInterfaces;
 
     [TestCategory("Serialization"), TestCategory("BVT")]
     public class OrleansJsonSerializerTests
@@ -75,10 +76,7 @@ namespace UnitTests.Serialization
             return result.ToString();
         }
 
-        public enum SampleEnum
-        {
-            One, Two
-        }
+        public enum SampleEnum { One , Two }
 
         public class JsonPoco
         {
